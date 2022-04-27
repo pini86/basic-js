@@ -20,13 +20,47 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(mode) {//здравствуй конструктор
+    this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    this.mode = mode || mode === undefined;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(message, key) {//зашифруем
+    if (!message || !key)
+      throw new Error('Incorrect arguments!');//валидность
+    let index = 0;
+    let output = "";
+    for (let i = 0; i < message.length; i++) {
+      if (!this.alphabet.includes(message[i].toUpperCase())) {
+        output += message[i];
+        continue;
+      }
+      const codeMessage = this.alphabet.indexOf(message[i].toUpperCase());
+      const codeKey = this.alphabet.indexOf(key[index++ % key.length].toUpperCase());
+      const encryptCode = (codeMessage + codeKey) % this.alphabet.length;
+      output += this.alphabet[encryptCode];
+    }
+    return this.mode ? output : output.split('').reverse().join('');
+  }
+
+  decrypt(message, key) {//расщифруем
+    if (!message || !key) throw new Error('Incorrect arguments!');//валидность
+    let index = 0;
+    let output = "";
+    for (let i = 0; i < message.length; i++) {
+      if (!this.alphabet.includes(message[i].toUpperCase())) {
+        output += message[i];
+        continue;
+      }
+      const codeMessage = this.alphabet.indexOf(message[i].toUpperCase());
+      const codeKey = this.alphabet.indexOf(key[index++ % key.length].toUpperCase());
+      const decryptCode = codeMessage - codeKey % this.alphabet.length;
+      if (decryptCode < 0){
+        output += this.alphabet[this.alphabet.length + decryptCode];
+      } else {
+        output += this.alphabet[decryptCode];
+      }
+    }
+    return this.mode ? output : output.split('').reverse().join('');
   }
 }
 

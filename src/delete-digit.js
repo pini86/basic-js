@@ -11,9 +11,12 @@ const { NotImplementedError } = require('../extensions/index.js');
  * For n = 152, the output should be 52
  *
  */
-function deleteDigit(/* n */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function deleteDigit(n) {
+  let numbers=[];  //массив всех возможных вариантов
+  for (let i=0 ; i<String(n).length; i++){  //перебор по количеству разрядов в числе
+    numbers.push(+(String(n).replace(String(n)[i],""))); //удаляем цифру соответсвующего разряда
+  }
+  return Math.max(...numbers);  //ищем максимальное
 }
 
 module.exports = {
